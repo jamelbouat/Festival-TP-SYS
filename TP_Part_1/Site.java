@@ -2,68 +2,57 @@ package TP_Part_1;
 
 public class Site {
 	
+	private int id_site;
+
 	/*
-	 * Nombre de guichets du site
+	 * Guichet du site
 	 */
-	public Guichet[] guichets;
+	public Guichet guichet;
 	
 	/*
-	 * Nombre de navettes présentes simultanément à l'arrêt du site
+	 * l'arrêt a un état soit présence de navette(true) ou absence de navette(false);
 	 */
-	public int nombre_navettes;
-		
+	public boolean arret = false;
+	
 	/*
-	 * True : entrée, False : site ordinaire(pas une entrée)
+	 * True : c'est une entrée, False : site ordinaire(pas une entrée)
 	 */
 	public boolean is_entree;
+
 	
-	/*
-	 * Nombre de billets du site
-	 */
-	public int nbr_billets_par_site;
 	
 	/**
-	 * Constructeur d'un site
-	 * @param nombre_guichets
-	 * @param nombre_navettes
-	 * @param is_entree
+	 * Constructeur du site
+	 * @param id_site : identifiant site
+	 * @param is_entree : site d'entrée ou autre
 	 */
-	public Site(int nombre_guichets, int nombre_navettes, boolean is_entree, int nbr_billets) {
-		
-		ajout_de_guichets(nombre_guichets);
-		this.nombre_navettes = nombre_navettes;
+	public Site(int id_site, boolean is_entree) {
+		this.id_site = id_site;
+		this.guichet = new Guichet();
 		this.is_entree = is_entree;
-		this.nbr_billets_par_site = nbr_billets;
-	}
-	
-	/**
-	 * Création de nbr guichets avec un nbr de billets pour chaque guichet
-	 * @param n : est le nombre de guichets du site
-	 */
-	public void ajout_de_guichets(int nbr_guichets) {
-		
-		// On assume que la division est entière et que tous les guichets ont un nombre égal en billets
-		int nbr_billets_par_guichet = nbr_billets_par_site / nbr_guichets;
-		
-		for(int i=0; i <nbr_guichets; i++) {
-			this.guichets[0] = new Guichet(nbr_billets_par_guichet);
-		}
 	}
 
 	/*
-	 * Achat d'un billet correspondant au guichet numero_guichet
+	 * Achat d'un billet
 	 */
-	public synchronized void acheter_billet(int numero_guichet) {
-		guichets[numero_guichet].acheter_un_billet();		
+	public synchronized void client_achete_billet() {
+		guichet.acheter_un_billet();		
 	}
 
 	/*
-	 * Retourne le nombre de guichets du site
+	 * Le client accède à la navette 
 	 */
-	public int nombre_guichets() {
-		return guichets.length;
+	public synchronized void client_accede_navette() {
+		// TODO Auto-generated method stub
+		
 	}
 	
+	/*
+	 * retourne l'identifiant du site
+	 */
+	public int retourner_id_site() {
+		return this.id_site;		
+	}
 	
 
 }

@@ -1,4 +1,4 @@
-package TP_Part_1;
+package TP_Part_2;
 
 public class Festivalier extends Thread {
 	
@@ -12,9 +12,18 @@ public class Festivalier extends Thread {
 		this.site_entree = site_entree;
 	}
 	
+	/*
+	 * Le festivalier sélectionne un guichet parmi les guichets du site
+	 * La méthode suivante retourne un guichet quelconque
+	 */
+	public int selectionner_guichet() {
+		int nbr_guichets_du_site = site_depart.nbr_guichets_du_site();
+		return (int) (Math.random() * nbr_guichets_du_site);
+	}
+	
 	public void run() {
-
-		site_depart.client_achete_billet();
+		int numero_guichet = selectionner_guichet();
+		site_depart.client_achete_billet(numero_guichet);
 		
 		if (! site_depart.equals(site_entree)) {
 			

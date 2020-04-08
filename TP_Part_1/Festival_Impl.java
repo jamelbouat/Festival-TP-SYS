@@ -3,63 +3,62 @@ package TP_Part_1;
 public class Festival_Impl {
 	
 	public static final int nbr_de_sites = 7;
-	public static final int nbr_entrees = 1;
 	public static final int nbr_de_festivaliers = 100;
 	public static final int nbr_de_navettes = 10;
 	public static final int nbr_places_navette = 12;
-	public static final int id_site_entree = 0;
-	public static final int id_site_depart_navettes = 1;
+	public static final int nbr_billets_total = 70;
+	public static Site[] sites;
+	public static Festivalier[] festivaliers;
+	public static Navette[] navettes;
 	
 	public static void main(String args[]) {
 		
-		Site[] sites = new Site[nbr_de_sites]; 
-		Festivalier[] festivaliers = new Festivalier[nbr_de_festivaliers]; 
-		Navette[] navettes = new Navette[nbr_de_navettes]; 
+		sites = new Site[nbr_de_sites]; 
+		festivaliers = new Festivalier[nbr_de_festivaliers]; 
+		navettes = new Navette[nbr_de_navettes]; 
+		
+		creerUneListeDeSites();
+		creerUneListeDeFestivaliers();
+		creerUneListeDeNavettes();		
+	}
+
+	public static void creerUneListeDeSites() {
+		/*
+		 * is_entree : True (c'est le site d'entrée)
+		 * 0 : identifiant du site d'entrée
+		 */
+		sites[0] = new Site(0, true);
 		
 		/*
-		 * is_entree : True (c'est le(s) site(s) d'entrée(s))
-		 * i : identifiant du site
-		 * il y a (nbr_entrees) entrées au festival
+		 * is_entree : false (c'est les sites oridinaires)
+		 * i : identifiant du site. Il y a (nbr_de_sites - 1) sites ordinaires
 		 */
-		for(int i = 0; i < nbr_entrees; i++) {
-			sites[i] = new Site(i, true);
-		}
 		
-		/*
-		 * is_entree : false (c'est le(s) site(s) oridinaire(s))
-		 * i : identifiant du site
-		 * il y a (nbr_de_sites - nbr_entrees) sites ordinaires
-		 */
-		for(int i = nbr_entrees; i < nbr_de_sites; i++) {
+		for(int i = 1; i < nbr_de_sites; i++) {
 			sites[i] = new Site(i, false);
 		}
-		
-		// Désignation d'un seul site d'entrée
-		Site site_entree = sites[id_site_entree];
-		
-		// Désignation du site de départ des navettes
-		Site site_depart_navette = sites[id_site_depart_navettes];
-		
-		// Création d'une liste de festivaliers
+	}
+	
+	public static void creerUneListeDeFestivaliers() {
 		for(int i = 0; i < nbr_de_festivaliers; i++) {
-			// Génération d'un id du site de départ
-			int id_site = generer_id_site_depart();
-			Site site_depart = sites[id_site];
-			festivaliers[i] = new Festivalier(i, site_depart, site_entree);
+			int id_site_genere = generer_id_site_depart_festivalier();
+			
+			Site site_depart = sites[id_site_genere];
+			festivaliers[i] = new Festivalier(i, site_depart, sites[0]);
 		}
+	}
+	
+	public static void creerUneListeDeNavettes() {
+		Site site_depart_navette = sites[1];
 		
 		for(int i = 0; i < nbr_de_navettes; i++) {	
-			navettes[i] = new Navette(i, sites, site_depart_navette, site_entree, nbr_places_navette);
+			navettes[i] = new Navette(i, sites, site_depart_navette, sites[0], nbr_places_navette);
 		}
-		
 	}
 	
 	// Génération d'un id site compris 0 et nbr_de_sites
-	public static int generer_id_site_depart() {
-		System.out.println((int) (Math.random() * nbr_de_sites));
+	public static int generer_id_site_depart_festivalier() {
 		return (int) (Math.random() * nbr_de_sites);
-	}
-	
-	
+	}	
 	
 }

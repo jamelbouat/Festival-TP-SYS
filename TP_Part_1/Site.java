@@ -32,15 +32,41 @@ public class Site {
 	public synchronized void client_achete_billet() {
 		guichet.acheter_un_billet();		
 	}
-
-	// Le client accède à la navette 
-	public synchronized void client_accede_navette() {
-		// TODO Auto-generated method stub
+	
+	/*
+	 * Faire monter des clients dans la navette s'il en reste des places libres
+	 */
+	public synchronized void monterClientsDansNavette(Navette navette) {
+		
+		/*
+		 * Interdire la montée des clients vu que c'est l'entrée du festival,
+		 * et appeler la méthode qui fait descencdre(vide) la navette
+		 */
+		if(is_entree) {
+			navette.faireViderNavetteAuSiteEntree();
+			
+		} else {
+			
+			
+			
+		}
+		
+		
 	}
+
+	
+	
+	
+//	// Le client accède à la navette 
+//	public synchronized void client_accede_navette() {
+//		// TODO Auto-generated method stub
+//	}
 	
 	// Retourne l'identifiant du site
 	public int retourner_id_site() {
 		return this.id_site;		
 	}
+
+	
 
 }

@@ -25,34 +25,39 @@ public class Festival_Impl {
 	public static void creerUneListeDeSites() {
 		/*
 		 * is_entree : True (c'est le site d'entrée)
-		 * 0 : identifiant du site d'entrée
+		 * nbr_de_sites : identifiant du site d'entrée,
+		 * C'est le dernier site de l'ensemble du site
 		 */
-		sites[0] = new Site(0, true);
+		sites[nbr_de_sites - 1] = new Site(nbr_de_sites, true);
 		
 		/*
 		 * is_entree : false (c'est les sites oridinaires)
 		 * i : identifiant du site. Il y a (nbr_de_sites - 1) sites ordinaires
 		 */
-		
 		for(int i = 1; i < nbr_de_sites; i++) {
-			sites[i] = new Site(i, false);
+			sites[i - 1] = new Site(i, false);
 		}
 	}
 	
 	public static void creerUneListeDeFestivaliers() {
 		for(int i = 0; i < nbr_de_festivaliers; i++) {
 			int id_site_genere = generer_id_site_depart_festivalier();
+			Site site_Arrivee_Potentiel_Festivalier = sites[id_site_genere];
 			
-			Site site_depart = sites[id_site_genere];
-			festivaliers[i] = new Festivalier(i, site_depart, sites[0]);
+			festivaliers[i] = new Festivalier(i, site_Arrivee_Potentiel_Festivalier, getSiteEntree());
+			
+			// Lancer le thread du festivalier
+			festivaliers[i].start();
 		}
 	}
 	
-	public static void creerUneListeDeNavettes() {
-		Site site_depart_navette = sites[1];
-		
+	public static void creerUneListeDeNavettes() {		
 		for(int i = 0; i < nbr_de_navettes; i++) {	
-			navettes[i] = new Navette(i, sites, site_depart_navette, sites[0], nbr_places_navette);
+			navettes[i] = new Navette(i, sites, getPremierSiteCircuit(), getSiteEntree(), nbr_places_navette);
+			
+			// Lancer le thread de la navette
+			navettes[i].setDaemon(true);
+			navettes[i].start();
 		}
 	}
 	
@@ -60,5 +65,13 @@ public class Festival_Impl {
 	public static int generer_id_site_depart_festivalier() {
 		return (int) (Math.random() * nbr_de_sites);
 	}	
+	
+	public static Site getSiteEntree() {
+		return sites[nbr_de_sites - 1];
+	}
+	
+	public static Site getPremierSiteCircuit() {
+		return sites[0];
+	}
 	
 }

@@ -1,6 +1,6 @@
 package TP_Part_1;
 
-public class Guichet extends Thread {
+public class Guichet {
 	
 	public int id_site;
 	public int nbr_billets_guichet;
@@ -9,7 +9,10 @@ public class Guichet extends Thread {
 		this.id_site = id_site;
 	}
 	
-	public void acheter_un_billet() {
-		
+	/*
+	 * Billets illimités, cette méthode retourne true
+	 */
+	public boolean acheter_un_billet() {
+		return true;
 	}
 }

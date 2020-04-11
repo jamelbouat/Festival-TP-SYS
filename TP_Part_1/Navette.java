@@ -1,54 +1,69 @@
 package TP_Part_1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Navette extends Thread {
 	
-	public Site[] sites;
-    static final int duree_deplacement_plus_arret  = 100;
-
+	private Site[] sites;
+    private static final int duree_deplacement_plus_arret  = 100;
 	private int id_navette;
-	private Site site_depart_navette;
-	private Site site_entree;
 	private int nbr_places_libres_navette;
-	private int nbr_max_places_navette;
+	private int nbr_max_places_libres;
+	private List<Festivalier> listeFestivaliersAtransporter;
 
-	public Navette(int id_navette, Site[] sites, Site site_depart, Site site_arrivee, int nbr_places) {
+	public Navette(int id_navette, Site[] sites, int nbr_places) {
 		this.id_navette = id_navette;
-		this.site_depart_navette = site_depart;
-		this.site_entree = site_arrivee;
 		this.nbr_places_libres_navette = nbr_places;
-		this.nbr_max_places_navette = nbr_places;
+		this.nbr_max_places_libres = nbr_places;
 		this.sites = sites;
+		this.listeFestivaliersAtransporter = new ArrayList<>();
 	}
 	
-	public int getNbrPlacesLibresNavette() {
-		return nbr_places_libres_navette;
+	public boolean verifierPlacesLibresDispo() {
+		return nbr_places_libres_navette != 0;
 	}
 	
 	public void setNbrPlacesLibresNavette(int placesPrises) {
-		nbr_places_libres_navette += placesPrises;
+		this.nbr_places_libres_navette += placesPrises;
 	}
 	
-	// Faire descencdre tous les clients de la navette
-	// Ce qui veut dire remettre les places de la navette toutes libres
+	/* 
+	* Faire descencdre tous les clients de la navette
+	* Ce qui veut dire remettre les places de la navette toutes libres
+	*/
 	public void faireViderNavetteAuSiteEntree() {
-		nbr_places_libres_navette = nbr_max_places_navette;
+		afficherLesfestivaliserArrives();
+		this.nbr_places_libres_navette = this.nbr_max_places_libres;
+		this.listeFestivaliersAtransporter.clear();
+	}
+	
+	// Méthode appelée ci-dessus, pour afficher les festivaliers arrivés
+	private void afficherLesfestivaliserArrives() {
+		for(Festivalier festivalier : listeFestivaliersAtransporter) {
+			System.out.println("Le festivalier N° " + festivalier.getId_festivalier() + " vient d'arriver à l'entrée du festival"
+					+ " au départ du site N° " + festivalier.getSite_depart());
+		}		
+	}
+	
+	/*
+	 * La navette prend un festivalier pour le transporter
+	 */
+	public void faireMonterUnFestivalier(Festivalier festivalier) {
+		this.listeFestivaliersAtransporter.add(festivalier);		
 	}
 
-	public void run() {
-		
+	public void run() {	
 		while(true) {
     		for (int i = 0; i < sites.length; i++) {
         		Site site = sites[i];
-        		
-        		site.monterClientsDansNavette(this);
+        		site.navetteSePresenteAuSite(this);
         		
         		try {
     				sleep(duree_deplacement_plus_arret);
     			} catch (InterruptedException e) {
     				e.printStackTrace();
     			}
-        		
-        		
         	}
     	}
 	}

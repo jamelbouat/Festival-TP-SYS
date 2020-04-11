@@ -1,5 +1,8 @@
 package TP_Part_1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Site {
 	
 	private int id_site;
@@ -13,6 +16,8 @@ public class Site {
 	// True : c'est une entrée, False : site ordinaire(pas une entrée)
 	public boolean is_entree;
 	
+	private List<Festivalier> listeFestivaliersAvecBillets;
+	
 	/**
 	 * Constructeur du site
 	 * @param id_site : identifiant site
@@ -22,6 +27,7 @@ public class Site {
 		this.id_site = id_site;
 		this.guichet = new Guichet(id_site);
 		this.is_entree = is_entree;
+		listeFestivaliersAvecBillets = new ArrayList<>();
 	}
 
 	/*
@@ -29,44 +35,52 @@ public class Site {
 	 * synchronized est utilisé pour permettre l'achat 
 	 * d'un seul billet à fois au niveau d'un guichet
 	 */
-	public synchronized void client_achete_billet() {
-		guichet.acheter_un_billet();		
+	public synchronized void festivalier_achete_billet(Festivalier festivalier) {
+		
+		if (guichet.acheter_un_billet() && is_entree) {
+			System.out.println("Festivalier N° " + festivalier.getId_festivalier() + " est déjà à l'entrée,"
+					+ " c'est le site N° " + this.id_site);
+		}
+		if (guichet.acheter_un_billet() && !is_entree) {
+			listeFestivaliersAvecBillets.add(festivalier);
+		}
 	}
 	
 	/*
-	 * Faire monter des clients dans la navette s'il en reste des places libres
+	 * La navette se présente au site courant
 	 */
-	public synchronized void monterClientsDansNavette(Navette navette) {
-		
+	public synchronized void navetteSePresenteAuSite(Navette navette) {
 		/*
 		 * Interdire la montée des clients vu que c'est l'entrée du festival,
-		 * et appeler la méthode qui fait descencdre(vide) la navette
+		 * et appeler la méthode qui fait descencdre les festivaliers et 
+		 * donc faire vider la navette.
 		 */
 		if(is_entree) {
 			navette.faireViderNavetteAuSiteEntree();
 			
 		} else {
-			
-			
-			
+			faireMonterClientsDansNavette(navette);			
 		}
-		
 		
 	}
 
-	
-	
-	
-//	// Le client accède à la navette 
-//	public synchronized void client_accede_navette() {
-//		// TODO Auto-generated method stub
-//	}
-	
+	/*
+	 * Pour faire monter un festivalier dans la navette, il faut avoir au moins une place libre dans la navette, et
+	 * la liste de festivaliers avec des billets non vide.
+	 */
+	private void faireMonterClientsDansNavette(Navette navette) {
+		while (navette.verifierPlacesLibresDispo() && !listeFestivaliersAvecBillets.isEmpty()) {
+			navette.faireMonterUnFestivalier(listeFestivaliersAvecBillets.remove(0));
+			
+			// Mettre à jour le nombre de places libres dans la navette
+			navette.setNbrPlacesLibresNavette(-1);
+		}
+		
+	}
+
 	// Retourne l'identifiant du site
 	public int retourner_id_site() {
 		return this.id_site;		
-	}
-
-	
+	}	
 
 }

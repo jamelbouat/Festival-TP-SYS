@@ -42,9 +42,11 @@ public class Festival_Impl {
 	public static void creerUneListeDeFestivaliers() {
 		for(int i = 0; i < nbr_de_festivaliers; i++) {
 			int id_site_genere = generer_id_site_depart_festivalier();
+			
+			// Génération d'un site aléatoire d'arrivée potentiel d'un festivalier
 			Site site_Arrivee_Potentiel_Festivalier = sites[id_site_genere];
 			
-			festivaliers[i] = new Festivalier(i, site_Arrivee_Potentiel_Festivalier, getSiteEntree());
+			festivaliers[i] = new Festivalier(i, site_Arrivee_Potentiel_Festivalier);
 			
 			// Lancer le thread du festivalier
 			festivaliers[i].start();
@@ -53,9 +55,12 @@ public class Festival_Impl {
 	
 	public static void creerUneListeDeNavettes() {		
 		for(int i = 0; i < nbr_de_navettes; i++) {	
-			navettes[i] = new Navette(i, sites, getPremierSiteCircuit(), getSiteEntree(), nbr_places_navette);
+			navettes[i] = new Navette(i, sites, nbr_places_navette);
 			
-			// Lancer le thread de la navette
+			/*
+			 *  Lancer le thread de la navette avec Daemon,
+			 *  La navette ou les navettes s'arrêtent s'il n'y a plus de festivaliers			 *  
+			*/
 			navettes[i].setDaemon(true);
 			navettes[i].start();
 		}

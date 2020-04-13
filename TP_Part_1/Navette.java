@@ -1,69 +1,85 @@
 package TP_Part_1;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Navette extends Thread {
 	
 	private Site[] sites;
-    private static final int duree_deplacement_plus_arret  = 100;
+    private int duree_deplacement_navette  = 200;
+	private int duree_arret_navette = 200;
 	private int id_navette;
 	private int nbr_places_libres_navette;
 	private int nbr_max_places_libres;
-	private List<Festivalier> listeFestivaliersAtransporter;
 
-	public Navette(int id_navette, Site[] sites, int nbr_places) {
+	/**
+	 * Constructeur navette, avec un nombre maximum de places et,
+	 * @param id_navette : identifiant navette
+	 * @param sites : référence de la liste des sites
+	 * @param nbr_places
+	 * @param duree_deplacement
+	 * @param duree_arret
+	 */
+	public Navette(int id_navette, Site[] sites, int nbr_places, int duree_deplacement, int duree_arret) {
 		this.id_navette = id_navette;
 		this.nbr_places_libres_navette = nbr_places;
 		this.nbr_max_places_libres = nbr_places;
+		this.duree_deplacement_navette = duree_deplacement;
+		this.duree_arret_navette = duree_arret; 
 		this.sites = sites;
-		this.listeFestivaliersAtransporter = new ArrayList<>();
 	}
 	
-	public boolean verifierPlacesLibresDispo() {
-		return nbr_places_libres_navette != 0;
+	/**
+	 * @return l'identifiant de la navette
+	 */
+	public int getIdNavette() {
+		return id_navette;
 	}
 	
+	/**
+	 * @return le nombre de places libres de la navette 
+	 */
+	public int getNbrPlacesLibresNavette() {
+		return nbr_places_libres_navette;
+	}
+	
+	/**
+	 * @param placesPrises : mettre à jour le nombre de places disponibles
+	 */
 	public void setNbrPlacesLibresNavette(int placesPrises) {
 		this.nbr_places_libres_navette += placesPrises;
 	}
 	
-	/* 
-	* Faire descencdre tous les clients de la navette
-	* Ce qui veut dire remettre les places de la navette toutes libres
-	*/
-	public void faireViderNavetteAuSiteEntree() {
-		afficherLesfestivaliserArrives();
-		this.nbr_places_libres_navette = this.nbr_max_places_libres;
-		this.listeFestivaliersAtransporter.clear();
-	}
-	
-	// Méthode appelée ci-dessus, pour afficher les festivaliers arrivés
-	private void afficherLesfestivaliserArrives() {
-		for(Festivalier festivalier : listeFestivaliersAtransporter) {
-			System.out.println("Le festivalier N° " + festivalier.getId_festivalier() + " vient d'arriver à l'entrée du festival"
-					+ " au départ du site N° " + festivalier.getSite_depart());
-		}		
-	}
-	
-	/*
-	 * La navette prend un festivalier pour le transporter
+	/**
+	 * Vider la navette à l'entrée du festival, donc remettre toutes les places disponibles
 	 */
-	public void faireMonterUnFestivalier(Festivalier festivalier) {
-		this.listeFestivaliersAtransporter.add(festivalier);		
+	public void viderNavetteAuSiteEntree() {
+		this.nbr_places_libres_navette = this.nbr_max_places_libres;
 	}
-
+	
+	/**
+	 * Faire fonctionner la navette en boucle, qui commence sa course au site id=1 (sites[0]) et,
+	 * se termine au site id=sites.length (sites[sites.length - 1]), puis rejoindre
+	 * le site 1, et recommencer sa tournée. Tant que il y a des festivaliers, la navette ou les 
+	 * navettes tournent sans fin grace le setDeamon du Thread navette 
+	 * duree_deplacement_navette = temps entre deux sites
+	 * duree_arret_navette = temps d'arret de la navette à chaque site
+	 */
 	public void run() {	
 		while(true) {
     		for (int i = 0; i < sites.length; i++) {
         		Site site = sites[i];
-        		site.navetteSePresenteAuSite(this);
         		
         		try {
-    				sleep(duree_deplacement_plus_arret);
+    				sleep(duree_deplacement_navette);
     			} catch (InterruptedException e) {
     				e.printStackTrace();
     			}
+        		site.navetteArriveAuSite(this);
+        		
+        		try {
+    				sleep(duree_arret_navette);
+    			} catch (InterruptedException e) {
+    				e.printStackTrace();
+    			}
+        		site.navetteQuitteLeSite(this);
         	}
     	}
 	}

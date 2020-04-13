@@ -10,7 +10,7 @@ public class Guichet {
 	}
 	
 	/*
-	 * Billets illimités, cette méthode retourne true
+	 * Billets illimités, cette méthode retourne toujours true
 	 */
 	public boolean acheter_un_billet() {
 		return true;

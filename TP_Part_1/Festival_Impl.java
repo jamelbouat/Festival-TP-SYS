@@ -4,8 +4,8 @@ public class Festival_Impl {
 	
 	public static final int nbr_de_sites = 7;
 	public static final int nbr_de_festivaliers = 5;
-	public static final int nbr_de_navettes = 10;
-	public static final int nbr_places_navette = 2;
+	public static final int nbr_de_navettes = 1;
+	public static final int nbr_places_navette = 1;
 	public static final int duree_deplacement_navette  = 200;
 	public static final int duree_arret_navette = 200;
 	public static Site[] sites;
@@ -53,12 +53,12 @@ public class Festival_Impl {
 			 * Temps de parcours entre deux sites du circuit pour un festivalier,
 			 * Composée de duree_deplacement_navette + duree_arret_navette 
 			 */
-			int temps_parcours_portion_festivalier = duree_deplacement_navette + duree_arret_navette;
+			int temps_parcours_interSitesPlusArret = duree_deplacement_navette + duree_arret_navette;
 			
 
 			Site site_entree = getSiteEntree();
 			// Liste de festivaliers avec id's compris entre 1 et nbr_de_festivaliers
-			festivaliers[i] = new Festivalier(i + 1, site_Arrivee_Potentiel_Festivalier, site_entree, temps_parcours_portion_festivalier);
+			festivaliers[i] = new Festivalier(i + 1, site_Arrivee_Potentiel_Festivalier, site_entree, temps_parcours_interSitesPlusArret);
 			
 			// Lancer le thread du festivalier
 			festivaliers[i].start();

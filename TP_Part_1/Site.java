@@ -50,7 +50,7 @@ public class Site {
 	}
 	
 	/**
-	 * Le festivalier essaye d'accéder dans une navette si une place libre y est.
+	 * Le festivalier essaye d'accéder dans une navette s'il y a une place libre.
 	 * La liste des navettes présentes à l'arret du site est parcouru et dès que 
 	 * une première place libre se présente le festivalier la prend, et entame son parcours jusqu'à 
 	 * l'entrée du festival.
@@ -80,7 +80,7 @@ public class Site {
 		System.out.println("Festivalier N° " + festivalier.getIdFestivalier() 
 							+ " se présente au site N° " + this.id_site
 							+ " et monte dans la navette N° " + navette_non_complete.getIdNavette()
-							+ ", il arrive à l'entrée du festival dans " + festivalier.getDureeDeplacementFestivalier()
+							+ ", il arrive à l'entrée du festival en " + festivalier.getDureeDeplacementFestivalier()
 							+ " unités de temps");
 	}
 	

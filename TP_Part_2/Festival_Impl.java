@@ -10,14 +10,14 @@ public class Festival_Impl {
 	public static final int duree_arret_navette = 100;
 	
 	// Minimum de billets par site
-	public static final int min_billets_par_site = 5;
+	public static final int min_billets_par_site = 2;
 	// Maximum de billets par site
-	public static final int max_billets_par_site = 15;
+	public static final int max_billets_par_site = 3;
 	
-	// Minimum de guichets par site
-	public static final int min_guichets_par_site = 2;
+	// Minimum de guichets par site (un minimum 1 est exigé pour le bon fonctionnement du festival)
+	public static final int min_guichets_par_site = 3;
 	// Maximum de guichets par site
-	public static final int max_guichets_par_site = 5;
+	public static final int max_guichets_par_site = 4;
 	
 	public static Site[] sites;
 	public static Festivalier[] festivaliers;
@@ -37,8 +37,11 @@ public class Festival_Impl {
 	}
 
 	public static void creerUneListeDeSites() {
+		int nombre_total_billets = 0;
+
 		// Génération d'un nombre aléatoire de billets par site
 		int nbr_billets_par_site = genererUnNombreAleatoire(min_billets_par_site, max_billets_par_site);
+		nombre_total_billets += nbr_billets_par_site;
 		
 		// Génération d'un nombre aléatoire de guichets par site 
 		int nbr_guichets_par_site = genererUnNombreAleatoire(min_guichets_par_site, max_guichets_par_site);
@@ -58,8 +61,11 @@ public class Festival_Impl {
 			nbr_billets_par_site = genererUnNombreAleatoire(min_billets_par_site, max_billets_par_site);
 			nbr_guichets_par_site = genererUnNombreAleatoire(min_guichets_par_site, max_guichets_par_site);
 			
+			nombre_total_billets += nbr_billets_par_site;
 			sites[i - 1] = new Site(i, false, nbr_billets_par_site, nbr_guichets_par_site);
 		}
+		
+		System.out.println("Nombre total de billets à vendre pour tout le festival est " + nombre_total_billets +"\n*********");
 	}
 	
 	public static void creerUneListeDeFestivaliers() {

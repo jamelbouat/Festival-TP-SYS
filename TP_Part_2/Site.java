@@ -72,12 +72,12 @@ public class Site {
 		 * Le site est l'entrée du festival, le festivalier entre dans le festival sans prendre de navette donc
 		 * son parcours se termine.
 		 */
-		if (guichets[index_guichet_choisi].acheter_un_billet() && is_entree) {
+		if (is_entree && guichets[index_guichet_choisi].acheterUnBillet()) {
 			System.out.println("Festivalier N° " + festivalier.getIdFestivalier() + " est déjà à l'entrée,"
 					+ " c'est le site N° " + this.id_site);
 			return false;
 			
-		} else if (guichets[index_guichet_choisi].acheter_un_billet()) {
+		} else if (guichets[index_guichet_choisi].acheterUnBillet()) {
 			return true;
 		}
 		
@@ -101,6 +101,7 @@ public class Site {
 				e.printStackTrace();
 			}
 		}
+		
 		arret.setNbrPlacesLibresNavette(-1);
 		
 		System.out.println("Festivalier N° " + festivalier.getIdFestivalier() 

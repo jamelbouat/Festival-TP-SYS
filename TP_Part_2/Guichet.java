@@ -14,9 +14,9 @@ public class Guichet extends Thread{
 		return id_guichet;
 	}
 
-	public synchronized boolean acheter_un_billet() {
+	public synchronized boolean acheterUnBillet() {
 		
-		if (this.site_du_guichet.getNbrBilletsDuSite() > 0) {
+		if (this.site_du_guichet.getNbrBilletsDuSite() >= 1) {
 			this.site_du_guichet.setNbrBilletsDuSite(-1);
 			return true;
 			

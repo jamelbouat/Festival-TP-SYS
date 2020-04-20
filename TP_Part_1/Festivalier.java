@@ -5,24 +5,24 @@ public class Festivalier extends Thread {
 	private int id_festivalier;
 	private Site site_depart;
 	private Site site_entree;
-	private int temps_parcours_portion_festivalier;
+	private int temps_parcours_interSitesPlusArret;
 	
 	/**
-	 * Constructeur festivalier :
+	 * Constructeur festivalier
 	 * @param id_festivalier
 	 * @param site_depart_pour_festivalier
 	 * @param site_entree
-	 * @param temps_parcours_portion_festivalier 
+	 * @param temps_parcours_interSitesPlusArret 
 	 */
-	public Festivalier(int id_festivalier, Site site_depart_pour_festivalier, Site site_entree, int temps_parcours_portion_festivalier) {
+	public Festivalier(int id_festivalier, Site site_depart_pour_festivalier, Site site_entree, int temps_parcours_interSitesPlusArret) {
 		this.id_festivalier = id_festivalier;
 		this.site_depart = site_depart_pour_festivalier;
 		this.site_entree = site_entree;
-		this.temps_parcours_portion_festivalier = temps_parcours_portion_festivalier;
+		this.temps_parcours_interSitesPlusArret = temps_parcours_interSitesPlusArret;
 	}	
 	
 	/**
-	 * @return l'identifiant du festivalier
+	 * @return l'identifiant (id) du festivalier
 	 */
 	public int getIdFestivalier() {
 		return id_festivalier;
@@ -35,12 +35,12 @@ public class Festivalier extends Thread {
 		return site_depart;
 	}
 	
-	 /**
-	  * calcul le temps de deplacement entre le site de départ du festivalier et le site d'entrée
-	  * @return la durée en milisecondes
-	  */
-    public int getDureeDeplacementFestivalier() {
-        return Math.abs(site_entree.getIdSite() - site_depart.getIdSite()) * temps_parcours_portion_festivalier;
+	/**
+	 * calcul le temps de deplacement entre le site de départ du festivalier et le site d'entrée
+	 * @return la durée de déplacement
+	 */
+	public int getDureeDeplacementFestivalier() {
+        return Math.abs(site_entree.getIdSite() - site_depart.getIdSite()) * temps_parcours_interSitesPlusArret;
     }
 
 	/*

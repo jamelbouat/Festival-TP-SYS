@@ -12,7 +12,7 @@ public class Festivalier extends Thread {
 	 * @param id_festivalier
 	 * @param site_depart_pour_festivalier
 	 * @param site_entree
-	 * @param temps_parcours_portion_festivalier 
+	 * @param temps_parcours_interSitesPlusArret 
 	 */
 	public Festivalier(int id_festivalier, Site site_depart_pour_festivalier, Site site_entree, int temps_parcours_interSitesPlusArret) {
 		this.id_festivalier = id_festivalier;
@@ -22,7 +22,7 @@ public class Festivalier extends Thread {
 	}	
 	
 	/**
-	 * @return l'identifiant du festivalier
+	 * @return l'identifiant (id) du festivalier
 	 */
 	public int getIdFestivalier() {
 		return id_festivalier;
@@ -37,14 +37,14 @@ public class Festivalier extends Thread {
 	
 	 /**
 	  * calcul le temps de deplacement entre le site de départ du festivalier et le site d'entrée
-	  * @return la durée en milisecondes
+	  * @return la durée de déplacement
 	  */
     public int getDureeDeplacementFestivalier() {
         return Math.abs(site_entree.getIdSite() - site_depart.getIdSite()) * temps_parcours_interSitesPlusArret;
     }
     
     /**
-     * Génération d'un index guichet compris entre 0 et (nbr_guichets du site de départ - 1)
+     * Génération d'un index guichet aléatoire compris entre 0 et (nbr_guichets du site de départ - 1)
      * Avec l'index généré, un guichet est sélectionné dans le tableau des guichets de ce site
      * @return index guichet généré
      */

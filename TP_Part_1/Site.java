@@ -14,11 +14,11 @@ public class Site {
 	// True : c'est une entrée, False : site ordinaire (n'est pas une entrée)
 	public boolean is_entree;
 	
-	// Liste contenant la liste des navettes présentes à l'arret du site
+	// Liste contenant les navettes présentes au même moment à l'arret du site
 	private List<Navette> arret;
 	
 	/**
-	 * Constructeur du site
+	 * Constructeur du site avec un guichet et un arret,
 	 * @param id_site : identifiant site
 	 * @param is_entree : site d'entrée ou autre
 	 */
@@ -30,18 +30,16 @@ public class Site {
 	}
 
 	/**
-	 * Achat d'un billet par un client.
-	 * synchronized est utilisé pour permettre l'achat 
-	 * d'un seul billet à fois au niveau d'un guichet
+	 * Achat d'un billet par un festivalier. Synchronized est utilisé pour permettre l'achat 
+	 * d'un seul billet à fois au niveau d'un guichet.
+	 * Si le site est l'entrée, le festivalier entre dans le festival sans prendre de navette,
+	 * donc son parcours se termine.
+	 * Si le site n'est pas l'entrée, il achète un billet et essaye d'accéder dans une navette
 	 * @param festivalier
 	 */
 	public synchronized void festivalierAcheteUnBillet(Festivalier festivalier) {
 		
-		/* 
-		 * Le site est l'entrée du festival, le festivalier entre dans le festival sans prendre de navette donc
-		 * son parcours se termine.
-		 */
-		if (guichet.acheter_un_billet() && is_entree) {
+		if (is_entree && guichet.acheter_un_billet()) {
 			System.out.println("Festivalier N° " + festivalier.getIdFestivalier() + " est déjà à l'entrée,"
 					+ " c'est le site N° " + this.id_site);
 		} else {
@@ -54,8 +52,9 @@ public class Site {
 	 * La liste des navettes présentes à l'arret du site est parcouru et dès que 
 	 * une première place libre se présente le festivalier la prend, et entame son parcours jusqu'à 
 	 * l'entrée du festival.
-	 * Un festivalier qui prend une place, une mise à jour est effectuée sur le nombre de places dans la navette
+	 * Un festivalier qui prend une place, une mise à jour est effectuée sur le nombre de places dans la navette.
 	 * Autrement, le festivalier se met en attente s'il n'y a pas de place libre 
+	 * synchronized est utilisé pour permette un seul accès à la fois dans la navette
 	 * @param festivalier
 	 */
 	public synchronized void festivalierAccedeLaNavette(Festivalier festivalier) {
@@ -68,14 +67,14 @@ public class Site {
 					break;
 				}
 			}
-			
+			// Aucune place libre, il se met en attente
 			if (navette_non_complete == null) {
 				try {
 	    			wait();
 	    		} catch(InterruptedException e) {}
 			}
 		}
-		
+		// Prend place dans la navette
 		navette_non_complete.setNbrPlacesLibresNavette(-1);
 		System.out.println("Festivalier N° " + festivalier.getIdFestivalier() 
 							+ " se présente au site N° " + this.id_site
@@ -86,7 +85,9 @@ public class Site {
 	
 	/**
 	 * La navette se présente au site courant
-	 * La navette est ajoutée à la liste des navettes présentes à l'arret du site
+	 * La navette est ajoutée à la liste des navettes présentes à l'arret du site.
+	 * synchronized est utilisé pour permettre l'ajout d'une navette à fois à l'arret du site.
+	 * On notifie tous les festivaliers en attente
 	 * @param navette
 	 */
 	public synchronized void navetteArriveAuSite(Navette navette) {
@@ -97,21 +98,21 @@ public class Site {
 	/**
 	 * La navette quitte le site courant
 	 * La navette est retirée de la liste des navettes présentes à l'arret du site
-	 * Si le site courant est l'entrée du festival, la navette se vide, donc
-	 * toutes ses places sont libres, puis la recommence son parcours du site id=1
+	 * Si le site courant est l'entrée du festival, la navette se vide, donc toutes 
+	 * ses places sont libres, puis elle recommence son parcours en allant au site id=1
+	 * synchronized est utilisé pour permettre le retrait d'une navette à fois à l'arret du site.
 	 * @param navette
 	 */
 	public synchronized void navetteQuitteLeSite(Navette navette) {
 		arret.remove(navette);
-		notifyAll();
 
 		if (this.is_entree) {
 			navette.viderNavetteAuSiteEntree();
 		}
 	}
 	
-	/* 
-	 * Retourne l'identifiant du site
+	/**
+	 * @return l'identifiant (id) du site
 	 */
 	public int getIdSite() {
 		return this.id_site;		
